@@ -1,14 +1,12 @@
 import React from 'react'
 import './menu-item.styles.scss';
-import { useNavigate } from 'react-router-dom'
+import { withRouter } from 'react-router-dom';
 
-const MenuItem = ({ title, imageUrl, linkUrl, size }) => {
-    const navigate = useNavigate();
-
+const MenuItem = ({ title, imageUrl, linkUrl, size, history }) => {
     return (
         <div
         className={`${size} menu-item`}
-        onClick={() => navigate(`${linkUrl}`)}
+        onClick={() => history.push(`${linkUrl}`)}
         >
             <div
             style={{backgroundImage: `url(${imageUrl})`}} 
@@ -22,4 +20,4 @@ const MenuItem = ({ title, imageUrl, linkUrl, size }) => {
     )
 }
 
-export default MenuItem
+export default withRouter(MenuItem);

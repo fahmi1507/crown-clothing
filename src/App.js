@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import Homepage from './pages/homepage/Homepage';
-import { Route, Routes, Navigate } from 'react-router-dom'
+import { Switch, Route, Redirect } from 'react-router-dom';
 import Shop from './pages/shop-page/Shop';
 import Header from './components/header/Header';
 import LoginAndRegister from './pages/LoginAndRegister/LoginAndRegister';
@@ -46,12 +46,21 @@ class App extends React.Component {
         return (
         <div>
             <Header/>
-            <Routes>
-                <Route path='/' element={<Homepage/>} />
-                <Route path='/shop' element={<Shop/>} />
-                <Route exact path='/checkout' element={<Checkout/>} />
-                <Route path='/login' element={this.props.currentUser? <Navigate to='/'/> : <LoginAndRegister/>} />
-            </Routes>
+            <Switch>
+                <Route exact path='/' component={Homepage} />
+                <Route path='/shop' component={Shop} />
+                <Route exact path='/checkout' component={Checkout} />
+                <Route
+                    path='/login'
+                    render={() => 
+                        this.props.currentUser ? (
+                            <Redirect to='/' />
+                        ) : (
+                            <LoginAndRegister/>
+                        ) 
+                    }
+                 />
+            </Switch>
         </div>
         );
         
