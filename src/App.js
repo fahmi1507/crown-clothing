@@ -5,8 +5,7 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import Shop from './pages/shop-page/Shop';
 import Header from './components/header/Header';
 import LoginAndRegister from './pages/LoginAndRegister/LoginAndRegister';
-import { auth, createUserProfileDoc, firestore } from './firebase/firebase.utils';
-import { doc, onSnapshot } from 'firebase/firestore';
+import { auth, createUserProfileDocument } from './firebase/firebase.utils';
 import { connect } from 'react-redux';
 import { setCurrentUser } from './redux/user/user-actions';
 import { selectCurrentUser } from './redux/user/user-selector';
@@ -18,21 +17,21 @@ class App extends React.Component {
     
     componentDidMount() {
         const { setCurrentUser } = this.props;
+
         this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
-            if(userAuth) {
-                await createUserProfileDoc(userAuth)
-                onSnapshot(doc(firestore, "users", userAuth.uid), (doc) => {
-                  setCurrentUser({
-                    currentUser: {
-                      id: doc.id,
-                      ...doc.data()
-                    }
-                  })
+        if (userAuth) {
+                const userRef = await createUserProfileDocument(userAuth);
+
+                userRef.onSnapshot(snapShot => {
+                setCurrentUser({
+                    id: snapShot.id,
+                    ...snapShot.data()
                 });
-        
-            } else {
-                setCurrentUser(userAuth)
-            }
+                });
+        } 
+            setCurrentUser(userAuth);
+
+
         });
 
     }
@@ -42,7 +41,6 @@ class App extends React.Component {
     }
 
     render() {
-        console.log(this.props.currentUser, '<<USER')
         return (
         <div>
             <Header/>

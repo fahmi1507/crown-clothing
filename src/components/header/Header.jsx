@@ -1,7 +1,6 @@
 import React from 'react'
 import './header.styles.scss';
 import { ReactComponent as Logo } from '../../assets/crown.svg'
-import { Link } from 'react-router-dom'
 import { auth } from '../../firebase/firebase.utils';
 import { connect } from 'react-redux';
 import CartIcon from '../cart-icon/cartIcon';
@@ -9,33 +8,31 @@ import CartDropdown from '../cart-dropdown/CartDropdown';
 import { createStructuredSelector } from 'reselect';
 import { selectCartHidden } from '../../redux/cart/cart-selectors';
 import { selectCurrentUser } from '../../redux/user/user-selector';
-
-
+import { HeaderContainer, OptionLink, OptionsContainer, LogoContainer } from './header.styles';
 
 const Header = ({ currentUser, hidden }) => {
-    console.log(currentUser, '<<<current')
     return (
-        <div className='header'>
-            <Link to='/' className='logo-container'>
+        <HeaderContainer>
+            <LogoContainer to='/'>
                 <Logo className='logo'/>
-            </Link>
+            </LogoContainer>
 
-            <div className="options">
-                <Link to='/shop' className='option'>
+            <OptionsContainer>
+                <OptionLink to='/shop'>
                     SHOP
-                </Link>
-                <Link to='/shop' className='option'>
-                    SHOP
-                </Link>
+                </OptionLink>
+                <OptionLink to='/shop'>
+                    CONTACT
+                </OptionLink>
                 {
                     currentUser ? 
-                    <div className="option" onClick={() => auth.signOut()}>LOGOUT</div> :
-                    <Link to='/login'>LOGIN</Link>
+                    <OptionLink as='div' onClick={() => auth.signOut()}>LOGOUT</OptionLink> :
+                    <OptionLink to='/login'>LOGIN</OptionLink>
                 }
                 <CartIcon/>
-            </div>
+            </OptionsContainer>
             { hidden && <CartDropdown/> }
-        </div>
+        </HeaderContainer>
     )
 }
 

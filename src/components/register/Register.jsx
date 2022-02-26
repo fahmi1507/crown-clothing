@@ -1,6 +1,5 @@
-import { createUserWithEmailAndPassword } from 'firebase/auth'
 import React, { Component } from 'react'
-import { auth, createUserProfileDoc } from '../../firebase/firebase.utils'
+import { auth, createUserProfileDocument } from '../../firebase/firebase.utils'
 import CustomButton from '../custom-button/CustomButton'
 import FormInput from '../form-input/FormInput'
 import './register.styles.scss'
@@ -28,9 +27,12 @@ export default class Register extends Component {
         }
 
         try {
-            const { user } = await createUserWithEmailAndPassword(auth, email, password);
+            const { user } = await auth.createUserWithEmailAndPassword(
+                email,
+                password
+            );
 
-            createUserProfileDoc(user, { displayName });
+            createUserProfileDocument(user, { displayName });
 
             this.setState({
                 displayName: '',

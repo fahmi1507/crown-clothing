@@ -1,4 +1,3 @@
-import { signInWithEmailAndPassword } from 'firebase/auth'
 import React, { Component } from 'react'
 import { auth, signInWithGoogle } from '../../firebase/firebase.utils'
 import CustomButton from '../custom-button/CustomButton'
@@ -27,7 +26,7 @@ export default class Login extends Component {
         const { email, password } = this.state;
 
         try {
-            await signInWithEmailAndPassword(auth, email, password)
+            await auth.signInWithEmailAndPassword(email, password);
             this.setState({ email: '', password: '' })
 
         } catch (e) {
