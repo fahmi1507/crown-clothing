@@ -1,33 +1,27 @@
 import React, { Component } from 'react'
+import { useState } from 'react'
 import { auth, signInWithGoogle } from '../../firebase/firebase.utils'
 import CustomButton from '../custom-button/CustomButton'
 import FormInput from '../form-input/FormInput'
 import './login.styles.scss'
 
-export default class Login extends Component {
-    constructor() {
-        super()
+const Login = () => {
+    const [userCredentials, setUserCredentials] = useState({ email: '', password: '' })
 
-        this.state = {
-            email: '',
-            password: '',
-        }
-    }
-
-    handleChange = (e) => {
+    const handleChange = (e) => {
         const { name, value } = e.target;
 
-        this.setState({ [name]: value })
+        setUserCredentials({ ...userCredentials, [name]: value })
     }
+    const { email, password } = userCredentials;
 
-    handleSubmit = async (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const { email, password } = this.state;
 
         try {
             await auth.signInWithEmailAndPassword(email, password);
-            this.setState({ email: '', password: '' })
+            setUserCredentials({ email: '', password: '' })
 
         } catch (e) {
             console.log(e, 'failed login');
@@ -35,34 +29,36 @@ export default class Login extends Component {
 
     }
 
-    render() {
-        return (
-            <div className='login'>
-                <h2>I already have an account</h2>
-                <span>Login with email and password</span>
-                <form onSubmit={this.handleSubmit}>
-                    <FormInput 
-                    type="email" 
-                    required 
-                    value={this.state.email}
-                    handleChange={this.handleChange}
-                    name='email'
-                    label='Email'
-                    />
-                    <FormInput 
-                    type="password" 
-                    required 
-                    value={this.state.password}
-                    handleChange={this.handleChange}
-                    name='password'
-                    label='Password'
-                    />
-                    <div className="buttons">
-                        <CustomButton type='submit'>LOGIN</CustomButton>
-                        <CustomButton type='button' onClick={signInWithGoogle} isGoogleSignIn>LOGIN WITH GOOGLE</CustomButton>
-                    </div>
-                </form>
-            </div>
-        )
-    }
+    
+    return (
+        <div className='login'>
+            <h2>I already have an account</h2>
+            <span>Login with email and password</span>
+            <form onSubmit={handleSubmit}>
+                <FormInput 
+                type="email" 
+                required 
+                value={email}
+                handleChange={handleChange}
+                name='email'
+                label='Email'
+                />
+                <FormInput 
+                type="password" 
+                required 
+                value={password}
+                handleChange={handleChange}
+                name='password'
+                label='Password'
+                />
+                <div className="buttons">
+                    <CustomButton type='submit'>LOGIN</CustomButton>
+                    <CustomButton type='button' onClick={signInWithGoogle} isGoogleSignIn>LOGIN WITH GOOGLE</CustomButton>
+                </div>
+            </form>
+        </div>
+    )
+    
 }
+
+export default Login;

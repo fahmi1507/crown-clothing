@@ -33,8 +33,23 @@ export const ButtonStyles = css`
     }
 `
 
+export const shopButtonStyles = css`
+    width: 80%;
+    position: absolute;
+    top: 250px;
+    opacity: .7;
+    display: none;
+
+    &:hover {
+        display: block;
+        opacity: 0.85;
+    }
+`
+
 const getButtonStyles = props => {
-    if (props.isGoogleSignIn) return GoogleSignInStyles;
+    const { isGoogleSignIn, inverted, shopButton } = props;
+    if (isGoogleSignIn) return GoogleSignInStyles;
+    if (shopButton) return shopButtonStyles;
 
     return props.inverted ? InvertedButton : ButtonStyles;
 }
